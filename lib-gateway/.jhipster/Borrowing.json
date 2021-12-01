@@ -1,0 +1,47 @@
+{
+  "microservicePath": "D:\\Documents\\MSc\\Software Construction\\lib_project_ms_architecture\\lib-microservice",
+  "fields": [
+    {
+      "fieldName": "date_borrowed",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "due_date",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "return_date",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "book",
+      "otherEntityName": "book",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": [],
+      "otherEntityField": "title",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "id"
+    },
+    {
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "borrowing"
+    }
+  ],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Borrowing",
+  "changelogDate": "20211112135728",
+  "microserviceName": "libproject",
+  "clientRootFolder": "libproject",
+  "databaseType": "sql"
+}

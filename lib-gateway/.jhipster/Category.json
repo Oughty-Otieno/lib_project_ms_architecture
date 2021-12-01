@@ -1,0 +1,24 @@
+{
+  "microservicePath": "D:\\Documents\\MSc\\Software Construction\\lib_project_ms_architecture\\lib-microservice",
+  "microserviceName": "libproject",
+  "clientRootFolder": "libproject",
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Category",
+  "changelogDate": "20211201090747"
+}

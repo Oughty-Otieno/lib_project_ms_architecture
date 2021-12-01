@@ -1,0 +1,38 @@
+{
+  "fields": [
+    {
+      "fieldName": "date_borrowed",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "due_date",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "return_date",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "book",
+      "otherEntityName": "book",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": [],
+      "otherEntityField": "title",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "id"
+    }
+  ],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Borrowing",
+  "changelogDate": "20211112135728",
+  "microserviceName": "libproject",
+  "clientRootFolder": "libproject",
+  "databaseType": "sql"
+}

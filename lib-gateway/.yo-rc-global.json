@@ -1,0 +1,9 @@
+{
+  "generator-jhipster:7.2.0": {
+    "promptValues": {
+      "packageName": "com.libgateway.sc",
+      "nativeLanguage": "en",
+      "microservicePath": "D:\\Documents\\MSc\\Software Construction\\lib_project_ms_architecture\\lib-microservice"
+    }
+  }
+}
