@@ -12,10 +12,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
+
+import com.libproject.sc.service.BookService;
+import com.libproject.sc.service.dto.BookDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,6 +57,9 @@ class BookResourceIT {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private EntityManager em;
@@ -96,6 +104,12 @@ class BookResourceIT {
     @BeforeEach
     public void initTest() {
         book = createEntity(em);
+    }
+
+    @Test
+    void testServiceGetAll(){
+        Page<BookDTO> bookDTOPage = this.bookService.getAll(Pageable.ofSize(1000));
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n books: " +bookDTOPage.getContent());
     }
 
     @Test

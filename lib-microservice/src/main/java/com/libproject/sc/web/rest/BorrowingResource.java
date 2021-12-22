@@ -2,6 +2,8 @@ package com.libproject.sc.web.rest;
 
 import com.libproject.sc.domain.Borrowing;
 import com.libproject.sc.repository.BorrowingRepository;
+import com.libproject.sc.service.BorrowingService;
+import com.libproject.sc.service.dto.BorrowingDTO;
 import com.libproject.sc.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,11 @@ public class BorrowingResource {
     private String applicationName;
 
     private final BorrowingRepository borrowingRepository;
+    private final BorrowingService borrowingService;
 
-    public BorrowingResource(BorrowingRepository borrowingRepository) {
+    public BorrowingResource(BorrowingRepository borrowingRepository, BorrowingService borrowingService) {
         this.borrowingRepository = borrowingRepository;
+        this.borrowingService = borrowingService;
     }
 
     /**
@@ -138,6 +141,9 @@ public class BorrowingResource {
                 if (borrowing.getReturn_date() != null) {
                     existingBorrowing.setReturn_date(borrowing.getReturn_date());
                 }
+                if (borrowing.getUser_id() != null) {
+                    existingBorrowing.setUser_id(borrowing.getUser_id());
+                }
 
                 return existingBorrowing;
             })
@@ -156,9 +162,9 @@ public class BorrowingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of borrowings in body.
      */
     @GetMapping("/borrowings")
-    public ResponseEntity<List<Borrowing>> getAllBorrowings(Pageable pageable) {
+    public ResponseEntity<List<BorrowingDTO>> getAllBorrowings(Pageable pageable) {
         log.debug("REST request to get a page of Borrowings");
-        Page<Borrowing> page = borrowingRepository.findAll(pageable);
+        Page<BorrowingDTO> page = borrowingService.getAllBorrowings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -172,7 +178,7 @@ public class BorrowingResource {
     @GetMapping("/borrowings/{id}")
     public ResponseEntity<Borrowing> getBorrowing(@PathVariable Long id) {
         log.debug("REST request to get Borrowing : {}", id);
-        Optional<Borrowing> borrowing = borrowingRepository.findById(id);
+        Optional<Borrowing> borrowing = Optional.ofNullable(borrowingService.getBorrowing(id));
         return ResponseUtil.wrapOrNotFound(borrowing);
     }
 

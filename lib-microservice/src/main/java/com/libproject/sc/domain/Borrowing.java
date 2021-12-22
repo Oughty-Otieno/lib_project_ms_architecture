@@ -28,6 +28,9 @@ public class Borrowing implements Serializable {
     @Column(name = "return_date")
     private LocalDate return_date;
 
+    @Column(name = "user_id")
+    private Integer user_id;
+
     @JsonIgnoreProperties(value = { "category" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
@@ -87,6 +90,19 @@ public class Borrowing implements Serializable {
         this.return_date = return_date;
     }
 
+    public Integer getUser_id() {
+        return this.user_id;
+    }
+
+    public Borrowing user_id(Integer user_id) {
+        this.setUser_id(user_id);
+        return this;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
     public Book getBook() {
         return this.book;
     }
@@ -127,6 +143,7 @@ public class Borrowing implements Serializable {
             ", date_borrowed='" + getDate_borrowed() + "'" +
             ", due_date='" + getDue_date() + "'" +
             ", return_date='" + getReturn_date() + "'" +
+            ", user_id=" + getUser_id() +
             "}";
     }
 }

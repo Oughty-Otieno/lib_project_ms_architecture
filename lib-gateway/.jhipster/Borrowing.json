@@ -14,6 +14,10 @@
     {
       "fieldName": "return_date",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "user_id",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [
@@ -26,14 +30,6 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "id"
-    },
-    {
-      "relationshipName": "user",
-      "otherEntityName": "user",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "login",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "borrowing"
     }
   ],
   "service": "no",
