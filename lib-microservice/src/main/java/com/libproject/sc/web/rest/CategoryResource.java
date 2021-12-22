@@ -2,6 +2,7 @@ package com.libproject.sc.web.rest;
 
 import com.libproject.sc.domain.Category;
 import com.libproject.sc.repository.CategoryRepository;
+import com.libproject.sc.service.CategoryService;
 import com.libproject.sc.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +41,11 @@ public class CategoryResource {
     private String applicationName;
 
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryResource(CategoryRepository categoryRepository) {
+    public CategoryResource(CategoryRepository categoryRepository, CategoryService categoryService) {
         this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     /**
@@ -171,7 +173,7 @@ public class CategoryResource {
     @GetMapping("/categories/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable Long id) {
         log.debug("REST request to get Category : {}", id);
-        Optional<Category> category = categoryRepository.findById(id);
+        Optional<Category> category = Optional.ofNullable(categoryService.getOneCategory(id));
         return ResponseUtil.wrapOrNotFound(category);
     }
 

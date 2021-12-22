@@ -40,6 +40,9 @@ class BorrowingResourceIT {
     private static final LocalDate DEFAULT_RETURN_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_RETURN_DATE = LocalDate.now(ZoneId.systemDefault());
 
+    private static final Integer DEFAULT_USER_ID = 1;
+    private static final Integer UPDATED_USER_ID = 2;
+
     private static final String ENTITY_API_URL = "/api/borrowings";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -67,7 +70,8 @@ class BorrowingResourceIT {
         Borrowing borrowing = new Borrowing()
             .date_borrowed(DEFAULT_DATE_BORROWED)
             .due_date(DEFAULT_DUE_DATE)
-            .return_date(DEFAULT_RETURN_DATE);
+            .return_date(DEFAULT_RETURN_DATE)
+            .user_id(DEFAULT_USER_ID);
         return borrowing;
     }
 
@@ -81,7 +85,8 @@ class BorrowingResourceIT {
         Borrowing borrowing = new Borrowing()
             .date_borrowed(UPDATED_DATE_BORROWED)
             .due_date(UPDATED_DUE_DATE)
-            .return_date(UPDATED_RETURN_DATE);
+            .return_date(UPDATED_RETURN_DATE)
+            .user_id(UPDATED_USER_ID);
         return borrowing;
     }
 
@@ -106,6 +111,7 @@ class BorrowingResourceIT {
         assertThat(testBorrowing.getDate_borrowed()).isEqualTo(DEFAULT_DATE_BORROWED);
         assertThat(testBorrowing.getDue_date()).isEqualTo(DEFAULT_DUE_DATE);
         assertThat(testBorrowing.getReturn_date()).isEqualTo(DEFAULT_RETURN_DATE);
+        assertThat(testBorrowing.getUser_id()).isEqualTo(DEFAULT_USER_ID);
     }
 
     @Test
@@ -140,7 +146,8 @@ class BorrowingResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(borrowing.getId().intValue())))
             .andExpect(jsonPath("$.[*].date_borrowed").value(hasItem(DEFAULT_DATE_BORROWED.toString())))
             .andExpect(jsonPath("$.[*].due_date").value(hasItem(DEFAULT_DUE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].return_date").value(hasItem(DEFAULT_RETURN_DATE.toString())));
+            .andExpect(jsonPath("$.[*].return_date").value(hasItem(DEFAULT_RETURN_DATE.toString())))
+            .andExpect(jsonPath("$.[*].user_id").value(hasItem(DEFAULT_USER_ID)));
     }
 
     @Test
@@ -157,7 +164,8 @@ class BorrowingResourceIT {
             .andExpect(jsonPath("$.id").value(borrowing.getId().intValue()))
             .andExpect(jsonPath("$.date_borrowed").value(DEFAULT_DATE_BORROWED.toString()))
             .andExpect(jsonPath("$.due_date").value(DEFAULT_DUE_DATE.toString()))
-            .andExpect(jsonPath("$.return_date").value(DEFAULT_RETURN_DATE.toString()));
+            .andExpect(jsonPath("$.return_date").value(DEFAULT_RETURN_DATE.toString()))
+            .andExpect(jsonPath("$.user_id").value(DEFAULT_USER_ID));
     }
 
     @Test
@@ -179,7 +187,11 @@ class BorrowingResourceIT {
         Borrowing updatedBorrowing = borrowingRepository.findById(borrowing.getId()).get();
         // Disconnect from session so that the updates on updatedBorrowing are not directly saved in db
         em.detach(updatedBorrowing);
-        updatedBorrowing.date_borrowed(UPDATED_DATE_BORROWED).due_date(UPDATED_DUE_DATE).return_date(UPDATED_RETURN_DATE);
+        updatedBorrowing
+            .date_borrowed(UPDATED_DATE_BORROWED)
+            .due_date(UPDATED_DUE_DATE)
+            .return_date(UPDATED_RETURN_DATE)
+            .user_id(UPDATED_USER_ID);
 
         restBorrowingMockMvc
             .perform(
@@ -196,6 +208,7 @@ class BorrowingResourceIT {
         assertThat(testBorrowing.getDate_borrowed()).isEqualTo(UPDATED_DATE_BORROWED);
         assertThat(testBorrowing.getDue_date()).isEqualTo(UPDATED_DUE_DATE);
         assertThat(testBorrowing.getReturn_date()).isEqualTo(UPDATED_RETURN_DATE);
+        assertThat(testBorrowing.getUser_id()).isEqualTo(UPDATED_USER_ID);
     }
 
     @Test
@@ -283,6 +296,7 @@ class BorrowingResourceIT {
         assertThat(testBorrowing.getDate_borrowed()).isEqualTo(DEFAULT_DATE_BORROWED);
         assertThat(testBorrowing.getDue_date()).isEqualTo(UPDATED_DUE_DATE);
         assertThat(testBorrowing.getReturn_date()).isEqualTo(UPDATED_RETURN_DATE);
+        assertThat(testBorrowing.getUser_id()).isEqualTo(DEFAULT_USER_ID);
     }
 
     @Test
@@ -297,7 +311,11 @@ class BorrowingResourceIT {
         Borrowing partialUpdatedBorrowing = new Borrowing();
         partialUpdatedBorrowing.setId(borrowing.getId());
 
-        partialUpdatedBorrowing.date_borrowed(UPDATED_DATE_BORROWED).due_date(UPDATED_DUE_DATE).return_date(UPDATED_RETURN_DATE);
+        partialUpdatedBorrowing
+            .date_borrowed(UPDATED_DATE_BORROWED)
+            .due_date(UPDATED_DUE_DATE)
+            .return_date(UPDATED_RETURN_DATE)
+            .user_id(UPDATED_USER_ID);
 
         restBorrowingMockMvc
             .perform(
@@ -314,6 +332,7 @@ class BorrowingResourceIT {
         assertThat(testBorrowing.getDate_borrowed()).isEqualTo(UPDATED_DATE_BORROWED);
         assertThat(testBorrowing.getDue_date()).isEqualTo(UPDATED_DUE_DATE);
         assertThat(testBorrowing.getReturn_date()).isEqualTo(UPDATED_RETURN_DATE);
+        assertThat(testBorrowing.getUser_id()).isEqualTo(UPDATED_USER_ID);
     }
 
     @Test

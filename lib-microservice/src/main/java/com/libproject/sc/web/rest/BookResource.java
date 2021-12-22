@@ -2,6 +2,8 @@ package com.libproject.sc.web.rest;
 
 import com.libproject.sc.domain.Book;
 import com.libproject.sc.repository.BookRepository;
+import com.libproject.sc.service.BookService;
+import com.libproject.sc.service.dto.BookDTO;
 import com.libproject.sc.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,11 @@ public class BookResource {
 
     private final BookRepository bookRepository;
 
-    public BookResource(BookRepository bookRepository) {
+    private final BookService bookService;
+
+    public BookResource(BookRepository bookRepository, BookService bookService) {
         this.bookRepository = bookRepository;
+        this.bookService = bookService;
     }
 
     /**
@@ -162,9 +166,9 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
     @GetMapping("/books")
-    public ResponseEntity<List<Book>> getAllBooks(Pageable pageable) {
+    public ResponseEntity<List<BookDTO>> getAllBooks(Pageable pageable) {
         log.debug("REST request to get a page of Books");
-        Page<Book> page = bookRepository.findAll(pageable);
+        Page<BookDTO> page = bookService.getAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -176,10 +180,10 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the book, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable Long id) {
+    public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
         log.debug("REST request to get Book : {}", id);
-        Optional<Book> book = bookRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(book);
+        Optional<BookDTO> bookDTO = Optional.ofNullable(bookService.getBook(id));
+        return ResponseUtil.wrapOrNotFound(bookDTO);
     }
 
     /**
