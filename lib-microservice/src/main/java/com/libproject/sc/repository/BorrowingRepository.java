@@ -16,6 +16,6 @@ import java.util.stream.DoubleStream;
 @Repository
 public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
 
-    @Query("select borrowing from Borrowing borrowing where borrowing.book = :book")
+    @Query("select borrowing from Borrowing borrowing where borrowing.book = :book and borrowing.return_date = null")
     List<Borrowing> findByBookId(@Param("book")Book book);
 }
