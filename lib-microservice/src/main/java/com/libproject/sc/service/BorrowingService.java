@@ -1,16 +1,15 @@
 package com.libproject.sc.service;
 
-import com.libproject.sc.domain.Book;
-import com.libproject.sc.domain.Borrowing;
-import com.libproject.sc.domain.Category;
-import com.libproject.sc.repository.BorrowingRepository;
 
-import com.libproject.sc.service.dto.BookDTO;
+import com.libproject.sc.domain.Borrowing;
+import com.libproject.sc.repository.BorrowingRepository;
 import com.libproject.sc.service.dto.BorrowingDTO;
-import com.libproject.sc.service.dto.CategoryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class BorrowingService {
@@ -30,7 +29,7 @@ public class BorrowingService {
 
         Borrowing borrowing = borrowingRepository.findById(id).orElse(null);
         BorrowingDTO currentBorrowingDTO = new BorrowingDTO(borrowing);
-        currentBorrowingDTO.setFine_accrued(100);
+        currentBorrowingDTO.setFine_accrued(calculateFine(borrowing));
 
 
         return currentBorrowingDTO;
@@ -39,8 +38,20 @@ public class BorrowingService {
     public BorrowingDTO toBorrowingDTO(Borrowing borrowing){
         BorrowingDTO currentBorrowDTO = new BorrowingDTO(borrowing);
 
-        currentBorrowDTO.setFine_accrued(10);
+        currentBorrowDTO.setFine_accrued(calculateFine(borrowing));
 
         return currentBorrowDTO;
+    }
+
+    public Integer calculateFine (Borrowing borrowing){
+        LocalDate due_date = borrowing.getDue_date();
+        LocalDate today = LocalDate.now();
+        Integer fine = borrowing.getBook().getFine_amount();
+        Integer extra_days = 0;
+        if(today.isAfter(due_date)){
+            extra_days = Math.toIntExact((ChronoUnit.DAYS.between(due_date,today)));
+        }
+
+        return (extra_days * fine);
     }
 }
