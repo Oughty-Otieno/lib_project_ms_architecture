@@ -46,12 +46,14 @@ public class BorrowingService {
     public Integer calculateFine (Borrowing borrowing){
         LocalDate due_date = borrowing.getDue_date();
         LocalDate today = LocalDate.now();
+        LocalDate date_returned = borrowing.getReturn_date();
         Integer fine = borrowing.getBook().getFine_amount();
         Integer extra_days = 0;
-        if(today.isAfter(due_date)){
+        if(((borrowing.getReturn_date()) == null) && (today.isAfter(due_date))){
             extra_days = Math.toIntExact((ChronoUnit.DAYS.between(due_date,today)));
+        } else if (((borrowing.getReturn_date()) != null) && (date_returned.isAfter(due_date))){
+            extra_days = Math.toIntExact((ChronoUnit.DAYS.between(due_date,date_returned)));
         }
-
         return (extra_days * fine);
     }
 }
